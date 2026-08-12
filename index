@@ -1,0 +1,947 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>English & Thai Classroom Learning</title>
+    <style>
+        /* Modern, clean, minimalist child-friendly palette */
+        :root {
+            --bg-color: #f7f9fc;
+            --card-bg: #ffffff;
+            --text-main: #2d3748;
+            --primary-blue: #4a90e2;
+            --accent-green: #2ecc71;
+            --accent-orange: #f39c12;
+            --accent-pink: #ef5777;
+            --accent-purple: #8854d0;
+            --border-radius: 20px;
+            --shadow: 0 8px 16px rgba(0,0,0,0.06);
+        }
+
+        body {
+            font-family: 'Helvetica Neue', Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+            max-width: 600px;
+        }
+
+        h1 {
+            color: var(--primary-blue);
+            font-size: 2.2rem;
+            margin-bottom: 5px;
+        }
+
+        p.subtitle {
+            font-size: 1.1rem;
+            color: #718096;
+            margin-top: 0;
+        }
+
+        /* Mode Selector */
+        .tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .tab-btn {
+            background-color: var(--card-bg);
+            border: 2px solid #e2e8f0;
+            padding: 12px 24px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: var(--shadow);
+        }
+
+        .tab-btn.active {
+            background-color: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        /* Game & Card Layout */
+        .container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            width: 100%;
+            max-width: 1000px;
+        }
+
+        /* Sub-headings for Spelling Groups */
+        .spelling-section-title {
+            grid-column: 1 / -1;
+            font-size: 1.6rem;
+            color: var(--text-main);
+            margin: 20px 0 5px 0;
+            padding-bottom: 10px;
+            border-bottom: 3px dashed #e2e8f0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            text-align: center;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            cursor: pointer;
+            border: 3px solid transparent;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            min-height: 280px;
+        }
+
+        .card-image-box {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100px;
+            height: 100px;
+            margin-bottom: 15px;
+        }
+
+        .card-image-box svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        /* Styling for Phonics Equation Blocks */
+        .phonics-equation {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 1.4rem;
+            font-weight: bold;
+            background: #f1f2f6;
+            padding: 10px 15px;
+            border-radius: 15px;
+            border: 2px dashed #cbd5e0;
+            color: #4a5568;
+            width: 90%;
+            box-sizing: border-box;
+        }
+        .phonics-root { color: var(--accent-pink); font-size: 1.6rem; }
+        .phonics-family { color: var(--primary-blue); font-size: 1.6rem; }
+        .phonics-result { color: var(--accent-green); font-size: 1.7rem; }
+
+        .card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 24px rgba(74, 144, 226, 0.15);
+            border-color: #ebf4ff;
+        }
+
+        .card:active {
+            transform: scale(0.98);
+        }
+
+        .word-eng {
+            font-size: 1.8rem;
+            font-weight: bold;
+            color: var(--primary-blue);
+            margin-bottom: 5px;
+        }
+
+        .word-thai {
+            font-size: 1.4rem;
+            color: var(--accent-green);
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .word-ipa {
+            font-size: 1.0rem;
+            color: #a0aec0;
+            font-style: italic;
+        }
+
+        /* Sound Buttons */
+        .sound-controls {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            width: 100%;
+        }
+
+        .sound-btn {
+            flex: 1;
+            border: none;
+            padding: 10px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+        }
+
+        .btn-en {
+            background-color: #ebf8ff;
+            color: #2b6cb0;
+        }
+
+        .btn-en:hover {
+            background-color: #bee3f8;
+        }
+
+        .btn-th {
+            background-color: #f0fff4;
+            color: #2f855a;
+        }
+
+        .btn-th:hover {
+            background-color: #c6f6d5;
+        }
+
+        /* Opposites Styling */
+        .opposite-frame {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        .opposite-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .opposite-item .card-image-box {
+            width: 80px;
+            height: 80px;
+        }
+
+        .opposite-separator {
+            font-size: 1.5rem;
+            color: #e2e8f0;
+            font-weight: bold;
+        }
+
+        /* Number Visual Layout */
+        .number-badge {
+            background-color: var(--accent-pink);
+            color: white;
+            font-size: 2.2rem;
+            font-weight: 900;
+            border-radius: 50%;
+            width: 60px;
+            height: 60px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+            box-shadow: 0 4px 10px rgba(239, 87, 119, 0.3);
+        }
+
+        .grid-count {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 4px;
+            max-width: 110px;
+            justify-content: center;
+            margin-top: 10px;
+        }
+
+        .dot {
+            width: 14px;
+            height: 14px;
+            background-color: var(--accent-pink);
+            border-radius: 50%;
+            display: inline-block;
+        }
+
+        /* Game Section Styling */
+        .game-area {
+            background-color: var(--card-bg);
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            padding: 30px;
+            width: 100%;
+            max-width: 600px;
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .game-word-display {
+            font-size: 3rem;
+            font-weight: bold;
+            letter-spacing: 12px;
+            color: var(--primary-blue);
+            margin: 20px 0;
+            text-transform: uppercase;
+        }
+
+        .game-instruction {
+            font-size: 1.2rem;
+            color: #718096;
+            margin-bottom: 15px;
+        }
+
+        .choices-grid {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+            width: 100%;
+        }
+
+        .choice-btn {
+            background-color: #f1f2f6;
+            border: 3px solid #dfe4ea;
+            color: var(--text-main);
+            font-size: 1.8rem;
+            font-weight: bold;
+            border-radius: 15px;
+            width: 60px;
+            height: 60px;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            text-transform: uppercase;
+        }
+
+        .choice-btn:hover {
+            transform: translateY(-2px);
+            background-color: var(--primary-blue);
+            color: white;
+            border-color: var(--primary-blue);
+        }
+
+        .choice-btn:active {
+            transform: scale(0.95);
+        }
+
+        /* Picture Selection Grid for the new game */
+        .pic-choices-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin: 25px 0;
+            width: 100%;
+        }
+
+        .pic-choice-card {
+            background-color: #f8f9fa;
+            border: 3px solid #e2e8f0;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .pic-choice-card:hover {
+            border-color: var(--primary-blue);
+            background-color: #ebf4ff;
+            transform: translateY(-3px);
+        }
+
+        .audio-trigger-btn {
+            background-color: var(--primary-blue);
+            color: white;
+            border: none;
+            padding: 15px 35px;
+            font-size: 1.3rem;
+            font-weight: bold;
+            border-radius: 50px;
+            cursor: pointer;
+            box-shadow: 0 5px 15px rgba(74, 144, 226, 0.3);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.2s;
+        }
+
+        .audio-trigger-btn:hover {
+            transform: scale(1.05);
+            background-color: #357abd;
+        }
+
+        /* Result Splash Box */
+        .result-splash {
+            margin-top: 25px;
+            padding: 15px 30px;
+            font-size: 1.6rem;
+            font-weight: bold;
+            border-radius: 30px;
+            transition: all 0.3s ease;
+            min-height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 80%;
+        }
+
+        .result-correct {
+            background-color: #d4edda;
+            color: #155724;
+            border: 3px solid #c3e6cb;
+            animation: bounce 0.5s ease;
+        }
+
+        .result-incorrect {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 3px solid #f5c6cb;
+            animation: shake 0.4s ease;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        .next-btn {
+            margin-top: 20px;
+            background-color: var(--accent-green);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            border-radius: 30px;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(46, 204, 113, 0.3);
+            transition: transform 0.2s;
+        }
+
+        .next-btn:hover {
+            transform: scale(1.05);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        footer {
+            margin-top: 50px;
+            font-size: 0.85rem;
+            color: #a0aec0;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>🎒 Fun English & Thai Sandbox</h1>
+        <p class="subtitle">Perfect for 6-year-olds! Tap any voice button to hear how the words are spoken.</p>
+    </header>
+
+    <div class="tabs">
+        <button class="tab-btn active" onclick="switchTab('vocab')">🏫 Classroom Words</button>
+        <button class="tab-btn" onclick="switchTab('family')">👨‍👩‍👧‍👦 Family Words</button>
+        <button class="tab-btn" onclick="switchTab('inenun')">🔤 in en un</button>
+        <button class="tab-btn" onclick="switchTab('spelling')">✏️ Spelling Families</button>
+        <button class="tab-btn" onclick="switchTab('opposites')">⚖️ Opposites</button>
+        <button class="tab-btn" onclick="switchTab('numbers')">🔢 Numbers 1-10</button>
+        <button class="tab-btn" onclick="switchTab('game')">🎮 AEIOU Game</button>
+        <button class="tab-btn" onclick="switchTab('picgame')">🔊 Picture Game</button>
+    </div>
+
+    <!-- Classroom Vocabulary Cards -->
+    <div id="vocab-container" class="container"></div>
+
+    <!-- Family Vocabulary Cards -->
+    <div id="family-container" class="container hidden"></div>
+
+    <!-- in en un Vocabulary Cards -->
+    <div id="inenun-container" class="container hidden"></div>
+
+    <!-- UPDATED Spelling Vocabulary Cards (Divided into 3 Phonics Groups) -->
+    <div id="spelling-container" class="container hidden">
+        <!-- Will be dynamically populated into subgroups -->
+    </div>
+
+    <!-- Opposites Cards -->
+    <div id="opposites-container" class="container hidden"></div>
+
+    <!-- Numbers Cards -->
+    <div id="numbers-container" class="container hidden"></div>
+
+    <!-- Game Session (AEIOU Game) -->
+    <div id="game-container" class="container hidden" style="justify-content: center; display: flex;">
+        <div class="game-area">
+            <h2 style="color: var(--accent-purple); margin-top: 0;">🎯 Vowel Missing Game!</h2>
+            <div class="game-instruction">Look at the picture and find the missing vowel (A, E, I, O, U)!</div>
+            
+            <div id="game-image-container" class="card-image-box" style="width: 120px; height: 120px;"></div>
+
+            <div id="game-word" class="game-word-display">_ _ _ _ _</div>
+            <div id="game-thai" class="word-thai" style="font-size: 1.5rem; margin-bottom: 20px;"></div>
+
+            <div class="choices-grid">
+                <button class="choice-btn" onclick="submitAnswer('a')">A</button>
+                <button class="choice-btn" onclick="submitAnswer('e')">E</button>
+                <button class="choice-btn" onclick="submitAnswer('i')">I</button>
+                <button class="choice-btn" onclick="submitAnswer('o')">O</button>
+                <button class="choice-btn" onclick="submitAnswer('u')">U</button>
+            </div>
+
+            <div id="game-feedback" class="result-splash hidden"></div>
+            <button id="next-question-btn" class="next-btn hidden" onclick="generateNewQuestion()">Next Word ➡️</button>
+        </div>
+    </div>
+
+    <!-- Game Session (Picture Matching Game) -->
+    <div id="picgame-container" class="container hidden" style="justify-content: center; display: flex;">
+        <div class="game-area">
+            <h2 style="color: var(--accent-pink); margin-top: 0;">🔊 Picture Matching Game!</h2>
+            <div class="game-instruction">Click the button to listen, then choose the correct picture!</div>
+            
+            <button class="audio-trigger-btn" onclick="playPicGameAudio()">🔊 Listen to the Word</button>
+
+            <div class="pic-choices-grid">
+                <div id="pic-choice-0" class="pic-choice-card" onclick="submitPicAnswer(0)"></div>
+                <div id="pic-choice-1" class="pic-choice-card" onclick="submitPicAnswer(1)"></div>
+                <div id="pic-choice-2" class="pic-choice-card" onclick="submitPicAnswer(2)"></div>
+            </div>
+
+            <div id="pic-game-feedback" class="result-splash hidden"></div>
+            <button id="next-pic-question-btn" class="next-btn hidden" onclick="generateNewPicQuestion()">Next Level ➡️</button>
+        </div>
+    </div>
+
+    <footer>
+        Uses the native Web Speech API built into your browser. Recommended on Safari/Chrome.
+    </footer>
+
+    <script>
+        // SVG Vectors
+        const svgs = {
+            window: '<svg viewBox="0 0 100 100"><rect x="15" y="15" width="70" height="70" rx="5" fill="#fbc531"/><rect x="23" y="23" width="23" height="23" fill="#eccc68"/><rect x="54" y="23" width="23" height="23" fill="#eccc68"/><rect x="23" y="54" width="23" height="23" fill="#eccc68"/><rect x="54" y="54" width="23" height="23" fill="#eccc68"/></svg>',
+            chair: '<svg viewBox="0 0 100 100"><path d="M30,35 L70,35 L70,45 L30,45 Z" fill="#e1b12c"/><path d="M30,15 L35,15 L35,45 L30,45 Z" fill="#44bd32"/><rect x="35" y="45" width="8" height="40" fill="#273c75"/><rect x="57" y="45" width="8" height="40" fill="#273c75"/></svg>',
+            book: '<svg viewBox="0 0 100 100"><path d="M15,20 Q50,30 85,20 L85,75 Q50,85 15,75 Z" fill="#00a8ff"/><path d="M50,25 L50,80" stroke="#fbc531" stroke-width="4"/></svg>',
+            ruler: '<svg viewBox="0 0 100 100"><rect x="10" y="35" width="80" height="30" rx="5" fill="#fbc531"/><line x1="20" y1="35" x2="20" y2="45" stroke="#2f3542" stroke-width="3"/><line x1="35" y1="35" x2="35" y2="45" stroke="#2f3542" stroke-width="3"/><line x1="50" y1="35" x2="50" y2="45" stroke="#2f3542" stroke-width="3"/><line x1="65" y1="35" x2="65" y2="45" stroke="#2f3542" stroke-width="3"/><line x1="80" y1="35" x2="80" y2="45" stroke="#2f3542" stroke-width="3"/></svg>',
+            pen: '<svg viewBox="0 0 100 100"><path d="M25,75 L65,35 L75,45 L35,85 Z" fill="#44bd32"/><path d="M25,75 L20,80 L35,85 Z" fill="#2f3542"/><circle cx="70" cy="40" r="4" fill="#fbc531"/></svg>',
+            pencil: '<svg viewBox="0 0 100 100"><path d="M25,75 L65,35 L75,45 L35,85 Z" fill="#e1b12c"/><path d="M25,75 L15,85 L35,85 Z" fill="#f5cd79"/><circle cx="15" cy="85" r="3" fill="#2f3542"/></svg>',
+            door: '<svg viewBox="0 0 100 100"><rect x="25" y="10" width="50" height="80" rx="5" fill="#cd84f1"/><circle cx="65" cy="50" r="5" fill="#fbc531"/></svg>',
+            box: '<svg viewBox="0 0 100 100"><polygon points="50,15 85,30 50,45 15,30" fill="#e1b12c"/><polygon points="15,30 50,45 50,85 15,70" fill="#c56cf0"/><polygon points="50,45 85,30 85,70 50,85" fill="#7d5fff"/></svg>',
+            lunchbox: '<svg viewBox="0 0 100 100"><rect x="20" y="35" width="60" height="45" rx="10" fill="#ff4d4d"/><rect x="25" y="30" width="50" height="10" rx="5" fill="#ffaf40"/><path d="M35,30 L35,15 L65,15 L65,30" stroke="#7d5fff" stroke-width="6" fill="none"/></svg>',
+            clock: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#f1f2f6" stroke="#ff4757" stroke-width="6"/><line x1="50" y1="50" x2="50" y2="25" stroke="#2f3542" stroke-width="4"/><line x1="50" y1="50" x2="70" y2="50" stroke="#2f3542" stroke-width="4"/></svg>',
+            grandfather: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" fill="#fbc531"/><circle cx="50" cy="50" r="32" fill="#ffeaa7"/><path d="M25,35 Q50,20 75,35" stroke="#d2dae2" stroke-width="12" fill="none"/><circle cx="40" cy="48" r="4" fill="#2f3542"/><circle cx="60" cy="48" r="4" fill="#2f3542"/><path d="M42,65 Q50,72 58,65" fill="none" stroke="#2f3542" stroke-width="4" stroke-linecap="round"/><rect x="33" y="44" width="14" height="8" rx="3" stroke="#2f3542" stroke-width="2" fill="none"/><rect x="53" y="44" width="14" height="8" rx="3" stroke="#2f3542" stroke-width="2" fill="none"/><line x1="47" y1="48" x2="53" y2="48" stroke="#2f3542" stroke-width="2"/></svg>',
+            grandmother: '<svg viewBox="0 0 100 100"><circle cx="50" cy="55" r="32" fill="#ffeaa7"/><circle cx="50" cy="22" r="12" fill="#d2dae2"/><path d="M22,48 Q15,35 30,30 Q50,25 70,30 Q85,35 78,48" stroke="#d2dae2" stroke-width="10" fill="none"/><circle cx="40" cy="52" r="4" fill="#2f3542"/><circle cx="60" cy="52" r="4" fill="#2f3542"/><path d="M44,70 Q50,75 56,70" fill="none" stroke="#2f3542" stroke-width="3" stroke-linecap="round"/><rect x="34" y="48" width="12" height="8" rx="2" stroke="#2f3542" stroke-width="2" fill="none"/><rect x="54" y="48" width="12" height="8" rx="2" stroke="#2f3542" stroke-width="2" fill="none"/></svg>',
+            father: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="35" fill="#ff7f50"/><circle cx="50" cy="50" r="32" fill="#ffeaa7"/><path d="M20,38 Q50,28 80,38 L80,45 L20,45 Z" fill="#2f3542"/><circle cx="40" cy="52" r="4" fill="#2f3542"/><circle cx="60" cy="52" r="4" fill="#2f3542"/><path d="M38,68 Q50,78 62,68" fill="none" stroke="#2f3542" stroke-width="4" stroke-linecap="round"/></svg>',
+            mother: '<svg viewBox="0 0 100 100"><path d="M20,60 Q10,30 50,15 Q90,30 80,60 Z" fill="#ff7675"/><circle cx="50" cy="52" r="28" fill="#ffeaa7"/><path d="M25,40 Q50,30 75,40" stroke="#ff7675" stroke-width="6" fill="none"/><circle cx="40" cy="52" r="4" fill="#2f3542"/><circle cx="60" cy="52" r="4" fill="#2f3542"/><path d="M38,66 Q50,74 62,66" fill="none" stroke="#ff7675" stroke-width="4" stroke-linecap="round"/></svg>',
+            brother: '<svg viewBox="0 0 100 100"><circle cx="50" cy="52" r="30" fill="#ffeaa7"/><path d="M24,42 Q50,20 76,42 Q50,30 24,42" fill="#74b9ff" stroke="#74b9ff" stroke-width="4"/><circle cx="40" cy="54" r="4" fill="#2f3542"/><circle cx="60" cy="54" r="4" fill="#2f3542"/><path d="M40,68 Q50,76 60,68" fill="none" stroke="#2f3542" stroke-width="4" stroke-linecap="round"/></svg>',
+            sister: '<svg viewBox="0 0 100 100"><path d="M22,55 Q15,35 50,22 Q85,35 78,55 Z" fill="#fd79a8"/><circle cx="50" cy="55" r="26" fill="#ffeaa7"/><circle cx="38" cy="54" r="3.5" fill="#2f3542"/><circle cx="62" cy="54" r="3.5" fill="#2f3542"/><path d="M42,68 Q50,75 58,68" fill="none" stroke="#2f3542" stroke-width="3" stroke-linecap="round"/><circle cx="24" cy="42" r="6" fill="#e84393"/><circle cx="76" cy="42" r="6" fill="#e84393"/></svg>',
+            son: '<svg viewBox="0 0 100 100"><circle cx="50" cy="55" r="26" fill="#ffeaa7"/><path d="M28,45 Q50,25 72,45" stroke="#54a0ff" stroke-width="6" stroke-linecap="round" fill="none"/><circle cx="42" cy="55" r="3" fill="#2f3542"/><circle cx="58" cy="55" r="3" fill="#2f3542"/><path d="M42,68 Q50,74 58,68" fill="none" stroke="#2f3542" stroke-width="3" stroke-linecap="round"/></svg>',
+            daughter: '<svg viewBox="0 0 100 100"><path d="M25,58 Q20,38 50,26 Q80,38 75,58 Z" fill="#fab1a0"/><circle cx="50" cy="56" r="24" fill="#ffeaa7"/><circle cx="42" cy="56" r="3" fill="#2f3542"/><circle cx="58" cy="56" r="3" fill="#2f3542"/><path d="M44,68 Q50,74 56,68" fill="none" stroke="#2f3542" stroke-width="3" stroke-linecap="round"/></svg>',
+            bun: '<svg viewBox="0 0 100 100"><path d="M20,65 Q50,30 80,65 Q85,75 75,80 Q50,85 25,80 Q15,75 20,65 Z" fill="#fccc74"/><path d="M30,55 Q50,45 70,55" stroke="#e0a94d" stroke-width="3" fill="none"/><path d="M40,65 Q50,58 60,65" stroke="#e0a94d" stroke-width="3" fill="none"/></svg>',
+            fun: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#78e08f"/><circle cx="35" cy="42" r="5" fill="#2f3542"/><circle cx="65" cy="42" r="5" fill="#2f3542"/><path d="M30,58 Q50,82 70,58" fill="none" stroke="#2f3542" stroke-width="5" stroke-linecap="round"/><path d="M20,30 Q30,25 40,32" fill="none" stroke="#2f3542" stroke-width="3"/><path d="M80,30 Q70,25 60,32" fill="none" stroke="#2f3542" stroke-width="3"/></svg>',
+            nun: '<svg viewBox="0 0 100 100"><path d="M20,80 C20,30 80,30 80,80 Z" fill="#2f3542"/><circle cx="50" cy="55" r="20" fill="#ffeaa7"/><rect x="25" y="70" width="50" height="15" fill="#ffffff"/><circle cx="44" cy="52" r="2.5" fill="#2f3542"/><circle cx="56" cy="52" r="2.5" fill="#2f3542"/><path d="M45,63 Q50,67 55,63" fill="none" stroke="#2f3542" stroke-width="2"/></svg>',
+            pun: '<svg viewBox="0 0 100 100"><rect x="15" y="25" width="70" height="50" rx="10" fill="#a55eea"/><text x="50" y="58" font-family="Arial" font-size="24" font-weight="bold" fill="#ffffff" text-anchor="middle">HaHa!</text></svg>',
+            run: '<svg viewBox="0 0 100 100"><circle cx="60" cy="25" r="10" fill="#2f3542"/><path d="M60,35 L50,50 L30,45 M50,50 L55,70 L75,85 M50,35 L35,30 L20,40 M50,50 L40,68 L25,65" stroke="#2f3542" stroke-width="6" stroke-linecap="round" fill="none"/></svg>',
+            sun: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="25" fill="#f5cd79"/><path d="M50,10 L50,20 M50,80 L50,90 M10,50 L20,50 M80,50 L90,50 M22,22 L29,29 M71,71 L78,78 M22,71 L29,64 M71,29 L78,22" stroke="#f5cd79" stroke-width="5" stroke-linecap="round"/></svg>',
+            gun: '<svg viewBox="0 0 100 100"><rect x="40" y="40" width="45" height="15" rx="3" fill="#778ca3"/><rect x="40" y="50" width="15" height="25" rx="3" fill="#778ca3"/><path d="M48,55 Q55,60 55,50" stroke="#2f3542" stroke-width="3" fill="none"/></svg>',
+            bin: '<svg viewBox="0 0 100 100"><polygon points="25,30 75,30 65,85 35,85" fill="#78e08f"/><rect x="20" y="20" width="60" height="10" rx="3" fill="#60a3bc"/><line x1="40" y1="40" x2="40" y2="75" stroke="#ffffff" stroke-width="3"/><line x1="50" y1="40" x2="50" y2="75" stroke="#ffffff" stroke-width="3"/><line x1="60" y1="40" x2="60" y2="75" stroke="#ffffff" stroke-width="3"/></svg>',
+            fin: '<svg viewBox="0 0 100 100"><path d="M10,50 Q40,30 90,50 Q40,70 10,50 Z" fill="#74b9ff"/><path d="M50,38 Q70,10 65,5 Q55,10 48,36 Z" fill="#0984e3"/><circle cx="25" cy="48" r="3" fill="#2f3542"/></svg>',
+            kin: '<svg viewBox="0 0 100 100"><circle cx="35" cy="45" r="16" fill="#ffeaa7"/><circle cx="65" cy="45" r="16" fill="#ffeaa7"/><path d="M20,80 Q35,65 50,80 Q65,65 80,80" stroke="#2f3542" stroke-width="5" fill="none"/></svg>',
+            pin: '<svg viewBox="0 0 100 100"><circle cx="50" cy="25" r="12" fill="#ff7675"/><rect x="47" y="37" width="6" height="45" fill="#d2dae2"/><polygon points="47,82 53,82 50,92" fill="#d2dae2"/></svg>',
+            tin: '<svg viewBox="0 0 100 100"><rect x="30" y="30" width="40" height="55" rx="5" fill="#d2dae2"/><ellipse cx="50" cy="30" rx="20" ry="6" fill="#b2bec3"/><line x1="30" y1="45" x2="70" y2="45" stroke="#b2bec3" stroke-width="2"/><line x1="30" y1="60" x2="70" y2="60" stroke="#b2bec3" stroke-width="2"/></svg>',
+            win: '<svg viewBox="0 0 100 100"><polygon points="50,15 63,40 90,40 68,57 76,85 50,68 24,85 32,57 10,40 37,40" fill="#f1c40f"/></svg>',
+            ben: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="30" fill="#ffeaa7"/><path d="M25,35 Q50,15 75,35" fill="#e67e22"/><circle cx="42" cy="48" r="3.5" fill="#2f3542"/><circle cx="58" cy="48" r="3.5" fill="#2f3542"/><path d="M42,65 Q50,72 58,65" fill="none" stroke="#2f3542" stroke-width="3"/><text x="50" y="95" font-family="Arial" font-size="14" font-weight="bold" fill="#2f3542" text-anchor="middle">BEN</text></svg>',
+            den: '<svg viewBox="0 0 100 100"><path d="M10,80 Q10,20 50,20 Q90,20 90,80 Z" fill="#7f8c8d"/><path d="M30,80 Q30,45 50,45 Q70,45 70,80 Z" fill="#2c3e50"/></svg>',
+            hen: '<svg viewBox="0 0 100 100"><circle cx="60" cy="40" r="18" fill="#f39c12"/><path d="M25,50 Q20,80 60,80 Q75,80 78,55 Z" fill="#e67e22"/><polygon points="78,38 88,42 78,46" fill="#f1c40f"/><path d="M55,22 Q60,12 65,22" fill="#e74c3c"/><circle cx="65" cy="35" r="3.5" fill="#2f3542"/></svg>',
+            men: '<svg viewBox="0 0 100 100"><circle cx="28" cy="45" r="14" fill="#ffeaa7"/><circle cx="50" cy="45" r="14" fill="#ffeaa7"/><circle cx="72" cy="45" r="14" fill="#ffeaa7"/><path d="M15,75 Q28,62 40,75 Q50,62 60,75 Q72,62 85,75" stroke="#2f3542" stroke-width="4" fill="none"/></svg>',
+            yen: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="38" fill="#2ecc71"/><text x="50" y="60" font-family="Arial" font-size="34" font-weight="bold" fill="#ffffff" text-anchor="middle">¥</text></svg>',
+            happy: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#ffdd59"/><circle cx="35" cy="40" r="5" fill="#2f3542"/><circle cx="65" cy="40" r="5" fill="#2f3542"/><path d="M30,55 Q50,80 70,55" fill="none" stroke="#2f3542" stroke-width="5" stroke-linecap="round"/></svg>',
+            sad: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#a5b1c2"/><circle cx="35" cy="40" r="5" fill="#2f3542"/><circle cx="65" cy="40" r="5" fill="#2f3542"/><path d="M30,70 Q50,45 70,70" fill="none" stroke="#2f3542" stroke-width="5" stroke-linecap="round"/></svg>',
+            long: '<svg viewBox="0 0 100 100"><rect x="10" y="45" width="80" height="10" fill="#32ff7e"/><polygon points="90,50 80,42 80,58" fill="#32ff7e"/><polygon points="10,50 20,42 20,58" fill="#32ff7e"/></svg>',
+            short: '<svg viewBox="0 0 100 100"><rect x="35" y="45" width="30" height="10" fill="#ff3838"/><polygon points="65,50 55,42 55,58" fill="#ff3838"/><polygon points="35,50 45,42 45,58" fill="#ff3838"/></svg>',
+            big: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="40" fill="#18dcff"/></svg>',
+            small: '<svg viewBox="0 0 100 100"><circle cx="50" cy="50" r="15" fill="#18dcff"/></svg>',
+            apple: '<svg viewBox="0 0 100 100"><circle cx="50" cy="55" r="30" fill="#ff4d4d"/><path d="M50,25 Q55,10 65,15" stroke="#2ecc71" stroke-width="4" fill="none"/><circle cx="45" cy="50" r="3" fill="#fff" opacity="0.5"/></svg>'
+        };
+
+        const classroomVocabulary = [
+            { eng: "window", thai: "หน้าต่าง", ipa: "nâa-dtàang", svg: svgs.window },
+            { eng: "chair", thai: "เก้าอี้", ipa: "gâo-îi", svg: svgs.chair },
+            { eng: "book", thai: "หนังสือ", ipa: "nǎng-sǔu", svg: svgs.book },
+            { eng: "ruler", thai: "ไม้บรรทัด", ipa: "mái-ban-tát", svg: svgs.ruler },
+            { eng: "pen", thai: "ปากกา", ipa: "bpàak-gaa", svg: svgs.pen },
+            { eng: "pencil", thai: "ดินสอ", ipa: "din-sǒo", svg: svgs.pencil },
+            { eng: "door", thai: "ประตู", ipa: "bprà-dtuu", svg: svgs.door },
+            { eng: "box", stroke: "none", thai: "กล่อง", ipa: "glàawng", svg: svgs.box },
+            { eng: "lunchbox", thai: "กล่องข้าว", ipa: "glàawng-kâao", svg: svgs.lunchbox },
+            { eng: "clock", thai: "นาฬิกา", ipa: "naa-lí-gaa", svg: svgs.clock }
+        ];
+
+        const familyVocabulary = [
+            { eng: "Grandfather", thai: "ปู่ หรือ ตา", ipa: "bplùu / dtaa", svg: svgs.grandfather },
+            { eng: "Grandmother", thai: "ย่า หรือ ยาย", ipa: "yâa / yaai", svg: svgs.grandmother },
+            { eng: "Father", thai: "พ่อ", ipa: "pâaw", svg: svgs.father },
+            { eng: "Mother", thai: "แม่", ipa: "mâae", svg: svgs.mother },
+            { eng: "Brother", thai: "พี่ชาย หรือ น้องชาย", ipa: "pîi-chaai / náawng-chaai", svg: svgs.brother },
+            { eng: "Sister", thai: "พี่สาว หรือ น้องสาว", ipa: "pîi-sǎao / náawng-sǎao", svg: svgs.sister },
+            { eng: "Son", thai: "ลูกชาย", ipa: "lûuk-chaai", svg: svgs.son },
+            { eng: "Daughter", thai: "ลูกสาว", ipa: "lûuk-sǎao", svg: svgs.daughter }
+        ];
+
+        const inEnUnVocabulary = [
+            { eng: "bun", thai: "ขนมปังก้อน", ipa: "ban", svg: svgs.bun },
+            { eng: "fun", thai: "ความสนุก", ipa: "fan", svg: svgs.fun },
+            { eng: "nun", thai: "แม่ชี", ipa: "nan", svg: svgs.nun },
+            { eng: "pun", thai: "การเล่นคำ", ipa: "pan", svg: svgs.pun },
+            { eng: "run", thai: "วิ่ง", ipa: "ran", svg: svgs.run },
+            { eng: "sun", thai: "พระอาทิตย์", ipa: "san", svg: svgs.sun },
+            { eng: "gun", thai: "ปืน", ipa: "gan", svg: svgs.gun },
+            { eng: "bin", thai: "ถังขยะ", ipa: "bin", svg: svgs.bin },
+            { eng: "fin", thai: "ครีบปลา", ipa: "fin", svg: svgs.fin },
+            { eng: "kin", thai: "ญาติพี่น้อง", ipa: "kin", svg: svgs.kin },
+            { eng: "pin", thai: "เข็มหมุด", ipa: "pin", svg: svgs.pin },
+            { eng: "tin", thai: "ดีบุก / กระป๋อง", ipa: "tin", svg: svgs.tin },
+            { eng: "win", thai: "ชนะ", ipa: "win", svg: svgs.win },
+            { eng: "ben", thai: "เบน (ชื่อคน)", ipa: "ben", svg: svgs.ben },
+            { eng: "den", thai: "ถ้ำสัตว์ / ห้องส่วนตัว", ipa: "den", svg: svgs.den },
+            { eng: "hen", thai: "แม่ไก่", ipa: "hen", svg: svgs.hen },
+            { eng: "men", thai: "ผู้ชายหลายคน", ipa: "men", svg: svgs.men },
+            { eng: "pen", thai: "ปากกา", ipa: "pen", svg: svgs.pen },
+            { eng: "ten", thai: "เลขสิบ", ipa: "ten", svg: svgs.clock },
+            { eng: "yen", thai: "สกุลเงินเยน", ipa: "yen", svg: svgs.yen }
+        ];
+
+        // NEW STRUCTURED Spelling Vocabulary Data (Root + Family split)
+        const spellingVocabulary = [
+            // -ar group
+            { root: "c", family: "ar", eng: "car", thai: "รถยนต์", ipa: "kaa" },
+            { root: "j", family: "ar", eng: "jar", thai: "เหยือก / โหลแก้ว", ipa: "jaa" },
+            { root: "w", family: "ar", eng: "war", thai: "สงคราม", ipa: "waw" },
+            // -et group
+            { root: "b", family: "et", eng: "bet", thai: "พนัน / เดิมพัน", ipa: "bet" },
+            { root: "g", family: "et", eng: "get", thai: "ได้รับ", ipa: "get" },
+            { root: "j", family: "et", eng: "jet", thai: "เครื่องบินเจ็ท", ipa: "jet" },
+            // -ip group
+            { root: "j", family: "ip", eng: "jip", thai: "รถจี๊บเล็ก", ipa: "jip" },
+            { root: "l", family: "ip", eng: "lip", thai: "ริมฝีปาก", ipa: "lip" },
+            { root: "s", family: "ip", eng: "sip", thai: "จิบ", ipa: "sip" }
+        ];
+
+        const oppositesVocabulary = [
+            { eng: "Happy", thai: "มีความสุข", ipa: "mii-kwaam-sùk", svg: svgs.happy, oppEng: "Sad", oppThai: "เศร้า", oppIpa: "sâo", oppSvg: svgs.sad },
+            { eng: "Long", thai: "ยาว", ipa: "yaaw", svg: svgs.long, oppEng: "Short", oppThai: "สั้น", oppIpa: "sân", oppSvg: svgs.short },
+            { eng: "Big", thai: "ใหญ่", ipa: "yài", svg: svgs.big, oppEng: "Small", oppThai: "เล็ก", oppIpa: "lék", oppSvg: svgs.small }
+        ];
+
+        const numbersVocabulary = [
+            { num: 1, eng: "one", thai: "หนึ่ง", ipa: "nùeng", svg: svgs.apple },
+            { num: 2, eng: "two", thai: "สอง", ipa: "sǎang", svg: svgs.apple },
+            { num: 3, eng: "three", thai: "สาม", ipa: "sǎam", svg: svgs.apple },
+            { num: 4, eng: "four", thai: "สี่", ipa: "sìi", svg: svgs.apple },
+            { num: 5, eng: "five", thai: "ห้า", ipa: "hâa", svg: svgs.apple },
+            { num: 6, eng: "six", thai: "หก", ipa: "hòk", svg: svgs.apple },
+            { num: 7, eng: "seven", thai: "เจ็ด", ipa: "jèt", svg: svgs.apple },
+            { num: 8, eng: "eight", thai: "แปด", ipa: "bpàet", svg: svgs.apple },
+            { num: 9, eng: "nine", thai: "เก้า", ipa: "gâo", svg: svgs.apple },
+            { num: 10, eng: "ten", thai: "สิบ", ipa: "sìp", svg: svgs.apple }
+        ];
+
+        // Combine game pool (Map spelling items safely so standard game engines won't crash)
+        const mappedSpellingPool = spellingVocabulary.map(item => ({
+            eng: item.eng,
+            thai: item.thai,
+            ipa: item.ipa,
+            // Fallback generation of equation text inside placeholder box for game views
+            svg: `<svg viewBox="0 0 100 100"><text x="50" y="55" font-size="22" font-weight="bold" fill="#4a90e2" text-anchor="middle">${item.root}+${item.family}</text></svg>`
+        }));
+
+        const totalGamePool = [...classroomVocabulary, ...familyVocabulary, ...inEnUnVocabulary, ...mappedSpellingPool, ...numbersVocabulary];
+
+        // Core Voice Function
+        function speakWord(text, lang) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                const utterance = new SpeechSynthesisUtterance(text);
+                utterance.lang = lang;
+                if (lang === 'en-US') {
+                    utterance.rate = 0.80;
+                    utterance.pitch = 1.15;
+                } else if (lang === 'th-TH') {
+                    utterance.rate = 1.0;
+                    utterance.pitch = 1.4;
+                }
+                window.speechSynthesis.speak(utterance);
+            }
+        }
+
+        // SPELLING SPECIAL: Speaks letters one-by-one, then says the whole word!
+        function speakSpellingPhonics(word, root, family) {
+            if ('speechSynthesis' in window) {
+                window.speechSynthesis.cancel();
+                
+                // 1. Spell the letters individually
+                const letters = word.toUpperCase().split('').join(' . '); 
+                const spellUtterance = new SpeechSynthesisUtterance(letters);
+                spellUtterance.lang = 'en-US';
+                spellUtterance.rate = 0.75;
+                spellUtterance.pitch = 1.2;
+
+                // 2. Pronounce the complete combined word after spelling
+                spellUtterance.onend = () => {
+                    setTimeout(() => {
+                        const wordUtterance = new SpeechSynthesisUtterance(word);
+                        wordUtterance.lang = 'en-US';
+                        wordUtterance.rate = 0.80;
+                        wordUtterance.pitch = 1.15;
+                        window.speechSynthesis.speak(wordUtterance);
+                    }, 400);
+                };
+
+                window.speechSynthesis.speak(spellUtterance);
+            }
+        }
+
+        // Render Standard Layouts
+        function renderStandardCards(data, containerId) {
+            const container = document.getElementById(containerId);
+            container.innerHTML = '';
+            data.forEach(item => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="card-image-box">${item.svg}</div>
+                    <div>
+                        <div class="word-eng">${item.eng}</div>
+                        <div class="word-thai">${item.thai}</div>
+                        <div class="word-ipa">(${item.ipa})</div>
+                    </div>
+                    <div class="sound-controls">
+                        <button class="sound-btn btn-en" onclick="event.stopPropagation(); speakWord('${item.eng}', 'en-US')">📣 ENG</button>
+                        <button class="sound-btn btn-th" onclick="event.stopPropagation(); speakWord('${item.thai}', 'th-TH')">📣 ไทย</button>
+                    </div>
+                `;
+                card.addEventListener('click', () => speakWord(item.eng, 'en-US'));
+                container.appendChild(card);
+            });
+        }
+
+        // Render Grouped Spelling Cards with "C + ar = Car" Layout
+        function renderSpellingSections() {
+            const container = document.getElementById('spelling-container');
+            container.innerHTML = '';
+
+            const families = ['ar', 'et', 'ip'];
+            const icons = { ar: '🚗', et: '🛩️', ip: '👄' };
+
+            families.forEach(fam => {
+                // 1. Create family sub-header header item
+                const headerBlock = document.createElement('div');
+                headerBlock.className = 'spelling-section-title';
+                headerBlock.innerHTML = `<span>${icons[fam]} -${fam} family</span>`;
+                container.appendChild(headerBlock);
+
+                // 2. Filter data items belonging to this phonics family block
+                const items = spellingVocabulary.filter(item => item.family === fam);
+                
+                items.forEach(item => {
+                    const card = document.createElement('div');
+                    card.className = 'card';
+                    card.innerHTML = `
+                        <!-- Phonics Equation Box Grid -->
+                        <div class="phonics-equation">
+                            <span class="phonics-root">${item.root.toUpperCase()}</span> 
+                            <span style="margin: 0 4px; color:#a0aec0;">+</span> 
+                            <span class="phonics-family">${item.family}</span> 
+                            <span style="margin: 0 4px; color:var(--primary-blue);">=</span> 
+                            <span class="phonics-result">${item.eng.charAt(0).toUpperCase() + item.eng.slice(1)}</span>
+                        </div>
+                        <div style="margin-top: 15px;">
+                            <div class="word-eng">${item.eng}</div>
+                            <div class="word-thai">${item.thai}</div>
+                            <div class="word-ipa">(${item.ipa})</div>
+                        </div>
+                        <div class="sound-controls">
+                            <button class="sound-btn btn-en" onclick="event.stopPropagation(); speakSpellingPhonics('${item.eng}', '${item.root}', '${item.family}')">✏️ SPELL</button>
+                            <button class="sound-btn btn-th" onclick="event.stopPropagation(); speakWord('${item.thai}', 'th-TH')">📣 ไทย</button>
+                        </div>
+                    `;
+                    // Clicking card directly triggers spelling logic
+                    card.addEventListener('click', () => speakSpellingPhonics(item.eng, item.root, item.family));
+                    container.appendChild(card);
+                });
+            });
+        }
+
+        // Render Opposites
+        function renderOppositeCards() {
+            const container = document.getElementById('opposites-container');
+            container.innerHTML = '';
+            oppositesVocabulary.forEach(pair => {
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="opposite-frame">
+                        <div class="opposite-item" onclick="event.stopPropagation(); speakWord('${pair.eng}', 'en-US')">
+                            <div class="card-image-box">${pair.svg}</div>
+                            <div class="word-eng" style="font-size: 1.4rem;">${pair.eng}</div>
+                            <div class="word-thai" style="font-size: 1.1rem;">${pair.thai}</div>
+                        </div>
+                        <div class="opposite-separator">↔</div>
+                        <div class="opposite-item" onclick="event.stopPropagation(); speakWord('${pair.oppEng}', 'en-US')">
+                            <div class="card-image-box">${pair.oppSvg}</div>
+                            <div class="word-eng" style="font-size: 1.4rem; color: var(--accent-orange);">${pair.oppEng}</div>
+                            <div class="word-thai" style="font-size: 1.1rem; color: #e67e22;">${pair.oppThai}</div>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(card);
+            });
+        }
+
+        // Render Numbers
+        function renderNumbersCards() {
+            const container = document.getElementById('numbers-container');
+            container.innerHTML = '';
+            numbersVocabulary.forEach(item => {
+                let dotsHtml = '';
+                for (let i = 0; i < item.num; i++) { dotsHtml += '<span class="dot"></span>'; }
+                const card = document.createElement('div');
+                card.className = 'card';
+                card.innerHTML = `
+                    <div class="number-badge">${item.num}</div>
+                    <div class="grid-count">${dotsHtml}</div>
+                    <div style="margin-top: 10px;">
+                        <div class="word-eng">${item.eng}</div>
+                        <div class="word-thai">${item.thai}</div>
+                    </div>
+                    <div class="sound-controls">
+                        <button class="sound-btn btn-en" onclick="event.stopPropagation(); speakWord('${item.eng}', 'en-US')">📣 ENG</button>
+                    </div>
+                `;
+                card.addEventListener('click', () => speakWord(item.eng, 'en-US'));
+                container.appendChild(card);
+            });
+        }
+
+        // ================= GAME ENGINE 1 (AEIOU) =================
+        let currentQuestion = {}; let missingLetter = ''; let displayWord = ''; let isAnswered = false;
+        function generateNewQuestion() {
+            isAnswered = false;
+            document.getElementById('game-feedback').classList.add('hidden');
+            document.getElementById('next-question-btn').classList.add('hidden');
+            const randomIndex = Math.floor(Math.random() * totalGamePool.length);
+            currentQuestion = totalGamePool[randomIndex];
+            const vowels = ['a', 'e', 'i', 'o', 'u'];
+            let wordStr = currentQuestion.eng.toLowerCase();
+            let vowelPositions = [];
+            for (let i = 0; i < wordStr.length; i++) { if (vowels.includes(wordStr[i])) vowelPositions.push(i); }
+            if (vowelPositions.length > 0) {
+                const targetPosition = vowelPositions[Math.floor(Math.random() * vowelPositions.length)];
+                missingLetter = wordStr[targetPosition];
+                let displayArr = wordStr.split(''); displayArr[targetPosition] = '_'; displayWord = displayArr.join('');
+            } else { missingLetter = 'e'; displayWord = 'p_n'; }
+            document.getElementById('game-image-container').innerHTML = currentQuestion.svg;
+            document.getElementById('game-word').textContent = displayWord;
+            document.getElementById('game-thai').textContent = currentQuestion.thai;
+        }
+        function submitAnswer(chosenLetter) {
+            if (isAnswered) return;
+            const feedbackEl = document.getElementById('game-feedback'); feedbackEl.classList.remove('hidden');
+            if (chosenLetter.toLowerCase() === missingLetter.toLowerCase()) {
+                isAnswered = true; feedbackEl.className = 'result-splash result-correct';
+                feedbackEl.textContent = '🎉 Correct! It is: ' + currentQuestion.eng.toUpperCase();
+                document.getElementById('game-word').textContent = currentQuestion.eng;
+                speakWord('ถูกต้องจ้า', 'th-TH'); setTimeout(() => { speakWord(currentQuestion.eng, 'en-US'); }, 1100);
+                document.getElementById('next-question-btn').classList.remove('hidden');
+            } else { feedbackEl.className = 'result-splash result-incorrect'; feedbackEl.textContent = '😢 Incorrect! Try again!'; speakWord('ลองใหม่น้า', 'th-TH'); }
+        }
+
+        // ================= GAME ENGINE 2 (PICTURE MATCHING) =================
+        let picGameCorrectItem = {}; let picGameOptions = []; let isPicAnswered = false;
+        function generateNewPicQuestion() {
+            isPicAnswered = false; document.getElementById('pic-game-feedback').classList.add('hidden'); document.getElementById('next-pic-question-btn').classList.add('hidden');
+            picGameCorrectItem = totalGamePool[Math.floor(Math.random() * totalGamePool.length)];
+            let pool = totalGamePool.filter(item => item.eng !== picGameCorrectItem.eng).sort(() => 0.5 - Math.random());
+            picGameOptions = [picGameCorrectItem, pool[0], pool[1]].sort(() => 0.5 - Math.random());
+            for (let i = 0; i < 3; i++) {
+                const choiceCard = document.getElementById(`pic-choice-${i}`);
+                if(picGameOptions[i].num) {
+                    choiceCard.innerHTML = `<div class="number-badge" style="width:45px; height:45px; font-size:1.5rem; margin:0;">${picGameOptions[i].num}</div>`;
+                } else { choiceCard.innerHTML = `<div class="card-image-box" style="margin:0; width:85px; height:85px;">${picGameOptions[i].svg}</div>`; }
+                choiceCard.style.borderColor = "#e2e8f0"; choiceCard.style.backgroundColor = "#f8f9fa";
+            }
+            setTimeout(() => { playPicGameAudio(); }, 300);
+        }
+        function playPicGameAudio() { if (picGameCorrectItem) speakWord(picGameCorrectItem.eng, 'en-US'); }
+        function submitPicAnswer(selectedIndex) {
+            if (isPicAnswered) return;
+            const feedbackEl = document.getElementById('pic-game-feedback'); feedbackEl.classList.remove('hidden');
+            if (picGameOptions[selectedIndex].eng === picGameCorrectItem.eng) {
+                isPicAnswered = true; feedbackEl.className = 'result-splash result-correct';
+                feedbackEl.textContent = `🎉 Correct! This is "${picGameCorrectItem.eng.toUpperCase()}"`;
+                document.getElementById(`pic-choice-${selectedIndex}`).style.borderColor = "var(--accent-green)";
+                speakWord('ถูกต้องจ้า', 'th-TH'); document.getElementById('next-pic-question-btn').classList.remove('hidden');
+            } else { feedbackEl.className = 'result-splash result-incorrect'; speakWord('ลองใหม่น้า', 'th-TH'); }
+        }
+
+        // Tab Switcher
+        function switchTab(tabName) {
+            const containers = {
+                vocab: document.getElementById('vocab-container'), family: document.getElementById('family-container'),
+                inenun: document.getElementById('inenun-container'), spelling: document.getElementById('spelling-container'),
+                opposites: document.getElementById('opposites-container'), numbers: document.getElementById('numbers-container'),
+                game: document.getElementById('game-container'), picgame: document.getElementById('picgame-container')
+            };
+            const tabs = document.querySelectorAll('.tab-btn');
+            tabs.forEach(btn => btn.classList.remove('active'));
+            Object.values(containers).forEach(c => c.classList.add('hidden'));
+
+            const activeIndex = { vocab:0, family:1, inenun:2, spelling:3, opposites:4, numbers:5, game:6, picgame:7 }[tabName];
+            tabs[activeIndex].classList.add('active');
+            containers[tabName].classList.remove('hidden');
+
+            if (tabName === 'game') generateNewQuestion();
+            if (tabName === 'picgame') generateNewPicQuestion();
+        }
+
+        window.addEventListener('DOMContentLoaded', () => {
+            renderStandardCards(classroomVocabulary, 'vocab-container');
+            renderStandardCards(familyVocabulary, 'family-container');
+            renderStandardCards(inEnUnVocabulary, 'inenun-container');
+            renderSpellingSections(); // Build custom multi-group layout
+            renderOppositeCards();
+            renderNumbersCards();
+        });
+    </script>
+</body>
+</html>
